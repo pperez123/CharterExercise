@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
 using System.Threading;
 using CharterUser.Common.ViewModel;
 using Foundation;
@@ -10,6 +13,7 @@ namespace CharterUser.UI
     {
         readonly UserViewModel viewModel = new UserViewModel();
         readonly MainTableViewSource tableViewSource = new MainTableViewSource();
+        readonly SemaphoreSlim tableLockObject = new SemaphoreSlim(1, 1);
 
         public MainViewController(IntPtr handle) : base(handle)
         {
@@ -26,6 +30,87 @@ namespace CharterUser.UI
             
             TableView.Source = tableViewSource;
             TableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
+            
+            viewModel.Users.Storage.CollectionChanged += StorageOnCollectionChanged;
+        }
+
+        void StorageOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        {
+            tableLockObject.Wait();
+
+            switch (args.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                {
+                    var addList = new List<NSIndexPath>();
+                    var endIdx = args.NewStartingIndex + args.NewItems.Count;
+                    for (var i = args.NewStartingIndex; i < endIdx; i++)
+                    {
+                        addList.Add(NSIndexPath.FromRowSection(i, 0));
+                    }
+
+                    BeginInvokeOnMainThread(() =>
+                    {
+                        try
+                        {
+                            TableView.InsertRows(addList.ToArray(), UITableViewRowAnimation.Automatic);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                            TableView.ReloadData();
+                        }
+                        finally
+                        {
+                            tableLockObject.Release();
+                        }
+                    });
+                }
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                {
+                    var removeList = new List<NSIndexPath>();
+                    var endIdx = args.OldStartingIndex + args.OldItems.Count;
+                    for (var i = args.OldStartingIndex; i < endIdx; i++)
+                        removeList.Add(NSIndexPath.FromRowSection(i, 0));
+
+                    BeginInvokeOnMainThread(() =>
+                    {
+                        try
+                        {
+                            TableView.DeleteRows(removeList.ToArray(), UITableViewRowAnimation.Automatic);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                            TableView.ReloadData();
+                        }
+                        finally
+                        {
+                            tableLockObject.Release();
+                        }
+                    });
+                }
+                    break;
+                default:
+                    BeginInvokeOnMainThread(() =>
+                    {
+                        try
+                        {
+                            TableView.ReloadData();
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                        }
+                        finally
+                        {
+                            tableLockObject.Release();
+                        }
+                    });
+                    
+                    break;
+            }
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)

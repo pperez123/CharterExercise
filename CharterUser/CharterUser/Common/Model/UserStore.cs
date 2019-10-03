@@ -1,5 +1,8 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Foundation;
+using Newtonsoft.Json;
 
 namespace CharterUser.Common.Model
 {
@@ -11,15 +14,25 @@ namespace CharterUser.Common.Model
         void Remove(User user);
         User Fetch(string id);
         bool Exists(string id);
+        void Persist();
+        void LoadUsers();
     }
     
     public class UserStore: IUserStore
     {
-        public ObservableCollection<User> Storage { get; private set; } = new ObservableCollection<User>();
+        static readonly string kPersistentStoreKey = "UserStoreKey";
+
+        public ObservableCollection<User> Storage { get; private set; } 
+
+        public UserStore()
+        {
+            LoadUsers();
+        }
 
         public void Add(User user)
         {
-            Storage.Add(user);
+            if (!Exists(user.UserId))
+                Storage.Add(user);
         }
 
         public void Remove(User user)
@@ -38,5 +51,30 @@ namespace CharterUser.Common.Model
         }
 
         public int Count => Storage.Count;
+
+        public void Persist()
+        {
+            var json = JsonConvert.SerializeObject(Storage);
+            NSUserDefaults.StandardUserDefaults.SetString(json, kPersistentStoreKey);
+        }
+
+        public void LoadUsers()
+        {
+            Storage = new ObservableCollection<User>();
+            var json = NSUserDefaults.StandardUserDefaults.StringForKey(kPersistentStoreKey);
+
+            if (!string.IsNullOrEmpty(json))
+            {
+                var users = JsonConvert.DeserializeObject<IEnumerable<User>>(json);
+                
+                if (users != null)
+                {
+                    var enumerable = users as User[] ?? users.ToArray();
+                    
+                    if (enumerable.Any())
+                        Storage = new ObservableCollection<User>(enumerable);
+                }
+            }
+        }
     }
 }
