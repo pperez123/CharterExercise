@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharterUser", "CharterUser\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharterUser.UITests", "CharterUser.UITests\CharterUser.UITests.csproj", "{31553F6E-9CE8-46D4-B032-DB064310F506}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharterUserTest", "CharterUserTest\CharterUserTest.csproj", "{DA1B2706-668C-4637-9E70-9247AA6847EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|iPhoneSimulator = Debug|iPhoneSimulator
@@ -39,5 +41,17 @@ Global
 		{31553F6E-9CE8-46D4-B032-DB064310F506}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31553F6E-9CE8-46D4-B032-DB064310F506}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31553F6E-9CE8-46D4-B032-DB064310F506}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA1B2706-668C-4637-9E70-9247AA6847EB}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{DA1B2706-668C-4637-9E70-9247AA6847EB}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{DA1B2706-668C-4637-9E70-9247AA6847EB}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{DA1B2706-668C-4637-9E70-9247AA6847EB}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{DA1B2706-668C-4637-9E70-9247AA6847EB}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{DA1B2706-668C-4637-9E70-9247AA6847EB}.Debug|iPhone.Build.0 = Debug|iPhone
+		{DA1B2706-668C-4637-9E70-9247AA6847EB}.Release|iPhone.ActiveCfg = Release|iPhone
+		{DA1B2706-668C-4637-9E70-9247AA6847EB}.Release|iPhone.Build.0 = Release|iPhone
+		{DA1B2706-668C-4637-9E70-9247AA6847EB}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
+		{DA1B2706-668C-4637-9E70-9247AA6847EB}.Debug|Any CPU.Build.0 = Debug|iPhoneSimulator
+		{DA1B2706-668C-4637-9E70-9247AA6847EB}.Release|Any CPU.ActiveCfg = Release|iPhoneSimulator
+		{DA1B2706-668C-4637-9E70-9247AA6847EB}.Release|Any CPU.Build.0 = Release|iPhoneSimulator
 	EndGlobalSection
 EndGlobal

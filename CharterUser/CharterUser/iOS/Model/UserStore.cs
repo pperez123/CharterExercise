@@ -9,7 +9,7 @@ namespace CharterUser.iOS.Model
 {
     public class UserStore: IUserStore
     {
-        static readonly string kPersistentStoreKey = "UserStoreKey";
+        public static readonly string kPersistentStoreKey = "UserStoreKey";
 
         public ObservableCollection<User> Storage { get; private set; } 
 

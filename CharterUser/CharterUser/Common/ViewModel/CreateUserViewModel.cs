@@ -22,6 +22,10 @@ namespace CharterUser.Common.ViewModel
     
     public class CreateUserViewModel: ICreateUser
     {
+        public static readonly string kPasswordLengthError = "Password must be between 5 and 12 characters in length.";
+        public static readonly string kPasswordAlphanumericError = "Password must contain letters and numbers only.";
+        public static readonly string kPasswordContentError = "Password must have at least one letter and one digit.";
+        public static readonly string kPasswordSequenceError = "Password must not contain any repeated sequences of characters.";
         public string Username { get; set; }
         public string Password { get; set; } = "";
         public string Email { get; set; }
@@ -68,22 +72,22 @@ namespace CharterUser.Common.ViewModel
 
             if (Password.Length >= 5 && Password.Length <= 12)
             {
-                errors.Add("Password must be between 5 and 12 characters in length.");
+                errors.Add(kPasswordLengthError);
             }
 
             if (!onlyAlphaNumeric.Matches(Password).Any())
             {
-                errors.Add("Password must contain letters and numbers only.");
+                errors.Add(kPasswordAlphanumericError);
             }
 
             if (!atLeastOneAlphaAndDigit.Matches(Password).Any())
             {
-                errors.Add("Password must have at least one letter and one digit.");
+                errors.Add(kPasswordContentError);
             }
 
             if (sequenceRepetition.Matches(Password).Any())
             {
-                errors.Add("Password must not contain any repeated sequences of characters.");
+                errors.Add(kPasswordSequenceError);
             }
 
             return errors;

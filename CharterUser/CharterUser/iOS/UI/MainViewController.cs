@@ -15,6 +15,8 @@ namespace CharterUser.iOS.UI
         readonly MainTableViewSource tableViewSource = new MainTableViewSource();
         readonly SemaphoreSlim tableLockObject = new SemaphoreSlim(1, 1);
 
+        private bool appeared;
+
         public MainViewController(IntPtr handle) : base(handle)
         {
         }
@@ -32,6 +34,17 @@ namespace CharterUser.iOS.UI
             TableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             
             viewModel.Users.Storage.CollectionChanged += StorageOnCollectionChanged;
+        }
+
+        public override void ViewWillAppear(bool animated)
+        {
+            if (!appeared)
+                TableView.ReloadData();
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            appeared = true;
         }
 
         void StorageOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
