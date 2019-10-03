@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace CharterUser.UI
+namespace CharterUser.iOS.UI
 {
 	[Register ("MainViewController")]
 	partial class MainViewController

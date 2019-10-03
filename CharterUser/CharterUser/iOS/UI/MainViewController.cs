@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Threading;
+using CharterUser.Common;
 using CharterUser.Common.ViewModel;
 using Foundation;
 using UIKit;
 
-namespace CharterUser.UI
+namespace CharterUser.iOS.UI
 {
     public partial class MainViewController : UIViewController
     {
-        readonly UserViewModel viewModel = new UserViewModel();
+        readonly UserViewModel viewModel = new UserViewModel(UserApp.SharedInstance.UserStore);
         readonly MainTableViewSource tableViewSource = new MainTableViewSource();
         readonly SemaphoreSlim tableLockObject = new SemaphoreSlim(1, 1);
 

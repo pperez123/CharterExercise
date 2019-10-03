@@ -7,7 +7,7 @@ using System.Diagnostics;
 using CoreGraphics;
 using UIKit;
 
-namespace CharterUser.Common.Extensions
+namespace CharterUser.iOS.Extensions
 {
     public struct UIOffset
     {

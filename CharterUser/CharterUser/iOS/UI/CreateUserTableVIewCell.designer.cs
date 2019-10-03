@@ -7,7 +7,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace CharterUser
+namespace CharterUser.iOS.UI
 {
 	[Register ("CreateUserTableViewCell")]
 	partial class CreateUserTableViewCell

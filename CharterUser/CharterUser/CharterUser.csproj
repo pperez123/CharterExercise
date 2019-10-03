@@ -130,29 +130,31 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="Common\Extensions\AutolayoutExtensions.cs" />
-    <Compile Include="Common\Extensions\StringExtensions.cs" />
-    <Compile Include="Common\Model\UserStore.cs" />
+    <Compile Include="Common\Model\IUserStore.cs" />
     <Compile Include="Common\UserApp.cs" />
-    <Compile Include="Main.cs" />
-    <Compile Include="SceneDelegate.cs" />
-    <Compile Include="UI\MainViewController.cs" />
-    <Compile Include="UI\ViewController.designer.cs">
-      <DependentUpon>MainViewController.cs</DependentUpon>
+    <Compile Include="iOS\Extensions\AutolayoutExtensions.cs" />
+    <Compile Include="iOS\Extensions\StringExtensions.cs" />
+    <Compile Include="iOS\Model\UserStore.cs" />
+    <Compile Include="iOS\UI\CreateUserTableViewCell.cs" />
+    <Compile Include="iOS\UI\CreateUserTableVIewCell.designer.cs">
+      <DependentUpon>CreateUserTableViewCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\CreateUserViewController.cs" />
-    <Compile Include="UI\CreateUserViewController.designer.cs">
+    <Compile Include="iOS\UI\CreateUserViewController.cs" />
+    <Compile Include="iOS\UI\CreateUserViewController.designer.cs">
       <DependentUpon>CreateUserViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="iOS\UI\MainViewController.cs" />
+    <Compile Include="iOS\UI\MainViewController.designer.cs">
+      <DependentUpon>MainViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main.cs" />
+    <Compile Include="SceneDelegate.cs" />
     <Compile Include="Common\ViewModel\CreateUserViewModel.cs" />
     <Compile Include="Common\ViewModel\UserViewModel.cs" />
     <Compile Include="Common\Model\User.cs" />
-    <Compile Include="UI\CreateUserTableViewCell.cs" />
-    <Compile Include="UI\CreateUserTableVIewCell.designer.cs">
-      <DependentUpon>CreateUserTableViewCell.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Common\Extensions" />
     <Folder Include="Resources" />
     <Folder Include="Common\ViewModel\" />
     <Folder Include="Common\Model\" />

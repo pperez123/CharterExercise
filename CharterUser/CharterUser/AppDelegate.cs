@@ -1,4 +1,7 @@
-﻿using Foundation;
+﻿using System;
+using CharterUser.Common;
+using CharterUser.iOS.Model;
+using Foundation;
 using UIKit;
 
 namespace CharterUser
@@ -15,9 +18,22 @@ namespace CharterUser
         [Export("application:didFinishLaunchingWithOptions:")]
         public bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
-            // Override point for customization after application launch.
-            // If not required for your application you can safely delete this method
+            UserApp.SharedInstance.UserStore = new UserStore();
             return true;
+        }
+
+        [ Export("applicationDidEnterBackground:") ]
+        public void DidEnterBackground(UIApplication application)
+        {
+            Console.WriteLine("App entering background state.");
+            UserApp.SharedInstance.UserStore.Persist();
+        }
+
+        [ Export("applicationWillTerminate:") ]
+        public void WillTerminate(UIApplication application)
+        {
+            Console.WriteLine("App is terminating.");
+            UserApp.SharedInstance.UserStore.Persist();
         }
 
         // UISceneSession Lifecycle

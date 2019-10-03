@@ -1,23 +1,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using CharterUser.Common.Model;
 using Foundation;
 using Newtonsoft.Json;
 
-namespace CharterUser.Common.Model
+namespace CharterUser.iOS.Model
 {
-    public interface IUserStore
-    {
-        ObservableCollection<User> Storage { get; }
-        int Count { get; }
-        void Add(User user);
-        void Remove(User user);
-        User Fetch(string id);
-        bool Exists(string id);
-        void Persist();
-        void LoadUsers();
-    }
-    
     public class UserStore: IUserStore
     {
         static readonly string kPersistentStoreKey = "UserStoreKey";

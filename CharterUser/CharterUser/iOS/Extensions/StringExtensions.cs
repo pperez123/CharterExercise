@@ -1,7 +1,7 @@
 using System;
 using UIKit;
 
-namespace CharterUser.Common.Extensions
+namespace CharterUser.iOS.Extensions
 {
     public static class StringExtensions
     {

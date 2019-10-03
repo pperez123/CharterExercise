@@ -1,12 +1,15 @@
+using CharterUser.Common.Model;
+
 namespace CharterUser.Common
 {
     public class UserApp
     {
-        private static UserApp SharedInstance { get; } = new UserApp();
+        public static UserApp SharedInstance { get; } = new UserApp();
+        
+        public IUserStore UserStore { get; set; }
 
         private UserApp()
         {
-            
         }
     }
 }
