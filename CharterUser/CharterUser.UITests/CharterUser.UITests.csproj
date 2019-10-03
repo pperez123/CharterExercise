@@ -32,15 +32,14 @@
     <PackageReference Include="Xamarin.UITest" Version="3.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CharterUser\CharterUser.csproj">
-      <Project>{BD263468-2E58-46BE-9FE3-0E9BAC558498}</Project>
-      <Name>CharterUser</Name>
-      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
-      <Private>False</Private>
-    </ProjectReference>
+    <Compile Include="Tests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Tests.cs" />
+    <ProjectReference Include="..\CharterUser\CharterUser.csproj">
+      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
+      <Project>{bd263468-2e58-46be-9fe3-0e9bac558498}</Project>
+      <Name>CharterUser</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
