@@ -130,6 +130,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="Common\Extensions\ObservableExtensions.cs" />
     <Compile Include="Common\Model\IUserStore.cs" />
     <Compile Include="Common\UserApp.cs" />
     <Compile Include="iOS\Extensions\AutolayoutExtensions.cs" />
@@ -154,7 +155,6 @@
     <Compile Include="Common\Model\User.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Common\Extensions" />
     <Folder Include="Resources" />
     <Folder Include="Common\ViewModel\" />
     <Folder Include="Common\Model\" />

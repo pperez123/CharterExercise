@@ -15,7 +15,7 @@ namespace CharterUserTest
         [Test]
         public void TestUserPersistence()
         {
-            NSUserDefaults.StandardUserDefaults.RemoveObject(UserStore.kPersistentStoreKey);
+            NSUserDefaults.StandardUserDefaults.RemoveObject(UserStore.PersistentStoreKey);
             
             var userStorage = new UserStore();
             
@@ -51,18 +51,19 @@ namespace CharterUserTest
         {
             var viewModel = new CreateUserViewModel(null);
             viewModel.Password = "1234";
-            var errors = viewModel.ValidatePassword();
-            Assert.True(errors.Any(x => x == CreateUserViewModel.kPasswordLengthError));
-            Assert.True(errors.Any(x => x == CreateUserViewModel.kPasswordContentError));
+            var errors = viewModel.ValidatePassword().ToArray();
+            Assert.True(errors.Any(x => x == CreateUserViewModel.PasswordLengthError));
+            Assert.True(errors.Any(x => x == CreateUserViewModel.PasswordAtLeastOneLetterDigitError));
 
             viewModel.Password = "$!@#$%^&*()!@";
-            var errors2 = viewModel.ValidatePassword();
-            Assert.True(errors2.Any(x => x == CreateUserViewModel.kPasswordLengthError));
-            Assert.True(errors2.Any(x => x == CreateUserViewModel.kPasswordAlphanumericError));
+            var errors2 = viewModel.ValidatePassword().ToArray();
+            Assert.True(errors2.Any(x => x == CreateUserViewModel.PasswordLengthError));
+            Assert.True(errors2.Any(x => x == CreateUserViewModel.PasswordAlphanumericError));
+            Assert.True(errors2.Any(x => x == CreateUserViewModel.PasswordAtLeastOneLetterDigitError));
 
             viewModel.Password = "abcabc123";
-            var errors3 = viewModel.ValidatePassword();
-            Assert.True(errors3.Any(x => x == CreateUserViewModel.kPasswordSequenceError));
+            var errors3 = viewModel.ValidatePassword().ToArray();
+            Assert.True(errors3.Any(x => x == CreateUserViewModel.PasswordRepeatedSequenceError));
         }
     }
 }

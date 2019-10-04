@@ -9,7 +9,7 @@ namespace CharterUser.iOS.Model
 {
     public class UserStore: IUserStore
     {
-        public static readonly string kPersistentStoreKey = "UserStoreKey";
+        public const string PersistentStoreKey = "UserStoreKey";
 
         public ObservableCollection<User> Storage { get; private set; } 
 
@@ -44,13 +44,13 @@ namespace CharterUser.iOS.Model
         public void Persist()
         {
             var json = JsonConvert.SerializeObject(Storage);
-            NSUserDefaults.StandardUserDefaults.SetString(json, kPersistentStoreKey);
+            NSUserDefaults.StandardUserDefaults.SetString(json, PersistentStoreKey);
         }
 
         public void LoadUsers()
         {
             Storage = new ObservableCollection<User>();
-            var json = NSUserDefaults.StandardUserDefaults.StringForKey(kPersistentStoreKey);
+            var json = NSUserDefaults.StandardUserDefaults.StringForKey(PersistentStoreKey);
 
             if (!string.IsNullOrEmpty(json))
             {
