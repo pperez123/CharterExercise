@@ -25,6 +25,8 @@
     <MtouchArch>x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+    <CodesignKey>iPhone Developer: Philip Perez (Q2H529CBBH)</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -34,6 +36,8 @@
     <WarningLevel>4</WarningLevel>
     <MtouchLink>None</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+    <CodesignKey>iPhone Developer: Philip Perez (Q2H529CBBH)</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,8 +49,10 @@
     <WarningLevel>4</WarningLevel>
     <MtouchArch>ARM64</MtouchArch>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Developer: Philip Perez (Q2H529CBBH)</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
+    <BuildIpa>true</BuildIpa>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -56,7 +62,8 @@
     <WarningLevel>4</WarningLevel>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchArch>ARM64</MtouchArch>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Developer: Philip Perez (Q2H529CBBH)</CodesignKey>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -119,6 +126,18 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon60.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\iconUser.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\iconUser.imageset\Man Circle.1.png" />
+    <ImageAsset Include="Assets.xcassets\iconUser.imageset\Man Circle%402x.1.png" />
+    <ImageAsset Include="Assets.xcassets\iconUser.imageset\Man Circle%403x.1.png" />
+    <ImageAsset Include="Assets.xcassets\iconEye.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\iconEye.imageset\ic_remove_red_eye_24px.png" />
+    <ImageAsset Include="Assets.xcassets\iconEye.imageset\ic_remove_red_eye_24px%402x.png" />
+    <ImageAsset Include="Assets.xcassets\iconEye.imageset\ic_remove_red_eye_24px%403x.png" />
+    <ImageAsset Include="Assets.xcassets\iconInvisible.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\iconInvisible.imageset\ic_visibility_off_24px.png" />
+    <ImageAsset Include="Assets.xcassets\iconInvisible.imageset\ic_visibility_off_24px%402x.png" />
+    <ImageAsset Include="Assets.xcassets\iconInvisible.imageset\ic_visibility_off_24px%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -148,6 +167,7 @@
     <Compile Include="iOS\UI\MainViewController.designer.cs">
       <DependentUpon>MainViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="iOS\UI\UserTableViewCell.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="SceneDelegate.cs" />
     <Compile Include="Common\ViewModel\CreateUserViewModel.cs" />
@@ -158,6 +178,9 @@
     <Folder Include="Resources" />
     <Folder Include="Common\ViewModel\" />
     <Folder Include="Common\Model\" />
+    <Folder Include="Assets.xcassets\iconUser.imageset\" />
+    <Folder Include="Assets.xcassets\iconEye.imageset\" />
+    <Folder Include="Assets.xcassets\iconInvisible.imageset\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

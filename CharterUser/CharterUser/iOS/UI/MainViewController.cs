@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
+using System.Reactive.Disposables;
 using System.Threading;
 using CharterUser.Common;
 using CharterUser.Common.ViewModel;
@@ -11,11 +13,11 @@ namespace CharterUser.iOS.UI
 {
     public partial class MainViewController : UIViewController
     {
-        readonly UserViewModel viewModel = new UserViewModel(UserApp.SharedInstance.UserStore);
+        public const string CellId = "userCell";
+        readonly IUserView viewModel = new UserViewModel(UserApp.SharedInstance.UserStore);
         readonly MainTableViewSource tableViewSource = new MainTableViewSource();
-        readonly SemaphoreSlim tableLockObject = new SemaphoreSlim(1, 1);
 
-        private bool appeared;
+        private bool appeared, emptyCellAdded;
 
         public MainViewController(IntPtr handle) : base(handle)
         {
@@ -27,11 +29,13 @@ namespace CharterUser.iOS.UI
             
             NavigationController.NavigationBar.ShadowImage = new UIImage();
             NavigationController.NavigationBar.BackIndicatorImage = new UIImage();
+            
 
             tableViewSource.ViewModel = viewModel;
             
             TableView.Source = tableViewSource;
             TableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
+            TableView.RegisterClassForCellReuse(typeof(UserTableViewCell), CellId);
             
             viewModel.Users.Storage.CollectionChanged += StorageOnCollectionChanged;
         }
@@ -49,46 +53,49 @@ namespace CharterUser.iOS.UI
 
         void StorageOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
-            tableLockObject.Wait();
-
-            switch (args.Action)
+            BeginInvokeOnMainThread(() =>
             {
-                case NotifyCollectionChangedAction.Add:
+                switch (args.Action)
                 {
-                    var addList = new List<NSIndexPath>();
-                    var endIdx = args.NewStartingIndex + args.NewItems.Count;
-                    for (var i = args.NewStartingIndex; i < endIdx; i++)
+                    case NotifyCollectionChangedAction.Add:
                     {
-                        addList.Add(NSIndexPath.FromRowSection(i, 0));
-                    }
+                        var addList = new List<NSIndexPath>();
+                        var endIdx = args.NewStartingIndex + args.NewItems.Count;
+                        for (var i = args.NewStartingIndex; i < endIdx; i++)
+                        {
+                            addList.Add(NSIndexPath.FromRowSection(i, 0));
+                        }
 
-                    BeginInvokeOnMainThread(() =>
-                    {
                         try
                         {
+                            TableView.BeginUpdates();
+                            
+                            // Check if empty state row still visible and remove that row before adding first user
+                            if (viewModel.EmptyStateVisible)
+                            {
+                                TableView.DeleteRows(new[] {NSIndexPath.FromRowSection(0, 0)},
+                                    UITableViewRowAnimation.Automatic);
+                                viewModel.EmptyStateVisible = false;
+                            }
+                            
                             TableView.InsertRows(addList.ToArray(), UITableViewRowAnimation.Automatic);
+                            TableView.EndUpdates();
                         }
                         catch (Exception e)
                         {
                             Console.WriteLine(e);
                             TableView.ReloadData();
                         }
-                        finally
-                        {
-                            tableLockObject.Release();
-                        }
-                    });
-                }
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                {
-                    var removeList = new List<NSIndexPath>();
-                    var endIdx = args.OldStartingIndex + args.OldItems.Count;
-                    for (var i = args.OldStartingIndex; i < endIdx; i++)
-                        removeList.Add(NSIndexPath.FromRowSection(i, 0));
+                    }
 
-                    BeginInvokeOnMainThread(() =>
+                        break;
+                    case NotifyCollectionChangedAction.Remove:
                     {
+                        var removeList = new List<NSIndexPath>();
+                        var endIdx = args.OldStartingIndex + args.OldItems.Count;
+                        for (var i = args.OldStartingIndex; i < endIdx; i++)
+                            removeList.Add(NSIndexPath.FromRowSection(i, 0));
+
                         try
                         {
                             TableView.DeleteRows(removeList.ToArray(), UITableViewRowAnimation.Automatic);
@@ -98,32 +105,13 @@ namespace CharterUser.iOS.UI
                             Console.WriteLine(e);
                             TableView.ReloadData();
                         }
-                        finally
-                        {
-                            tableLockObject.Release();
-                        }
-                    });
+                    }
+                        break;
+                    default:
+                        TableView.ReloadData();
+                        break;
                 }
-                    break;
-                default:
-                    BeginInvokeOnMainThread(() =>
-                    {
-                        try
-                        {
-                            TableView.ReloadData();
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e);
-                        }
-                        finally
-                        {
-                            tableLockObject.Release();
-                        }
-                    });
-                    
-                    break;
-            }
+            });
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
@@ -137,7 +125,7 @@ namespace CharterUser.iOS.UI
 
     class MainTableViewSource : UITableViewSource
     {
-        public UserViewModel ViewModel { get; set; }
+        public IUserView ViewModel { get; set; }
         
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
@@ -148,8 +136,22 @@ namespace CharterUser.iOS.UI
                 var cell = new UITableViewCell(UITableViewCellStyle.Default, null);
                 cell.TextLabel.Font = UIFont.SystemFontOfSize(17);
                 cell.TextLabel.Text = "No users found. Please tap \"+\" to add a user.";
-
+                
+                if (ViewModel != null)
+                    ViewModel.EmptyStateVisible = true;
+                
                 return cell;
+            }
+            else
+            {
+                if (indexPath.Row < ViewModel?.Users.Count && 
+                    tableView.DequeueReusableCell(MainViewController.CellId) is UserTableViewCell cell)
+                {
+                    var user = ViewModel.Users.Storage.ElementAt(indexPath.Row);
+                    cell.Configure(user);
+
+                    return cell;
+                }
             }
             
             return new UITableViewCell();

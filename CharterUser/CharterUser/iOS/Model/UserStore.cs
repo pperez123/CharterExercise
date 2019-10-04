@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using CharterUser.Common.Model;
 using Foundation;
 using Newtonsoft.Json;
@@ -9,7 +10,8 @@ namespace CharterUser.iOS.Model
 {
     public class UserStore: IUserStore
     {
-        public const string PersistentStoreKey = "UserStoreKey";
+        const string PersistentStoreKey = "UserStoreKey";
+        static readonly object LockObject = new object();
 
         public ObservableCollection<User> Storage { get; private set; } 
 
@@ -43,8 +45,14 @@ namespace CharterUser.iOS.Model
 
         public void Persist()
         {
-            var json = JsonConvert.SerializeObject(Storage);
-            NSUserDefaults.StandardUserDefaults.SetString(json, PersistentStoreKey);
+            Task.Factory.StartNew(() =>
+            {
+                lock (LockObject)
+                {
+                    var json = JsonConvert.SerializeObject(Storage);
+                    NSUserDefaults.StandardUserDefaults.SetString(json, PersistentStoreKey);
+                }
+            });
         }
 
         public void LoadUsers()
@@ -64,6 +72,11 @@ namespace CharterUser.iOS.Model
                         Storage = new ObservableCollection<User>(enumerable);
                 }
             }
+        }
+
+        public static void ClearLocalStorage()
+        {
+            NSUserDefaults.StandardUserDefaults.RemoveObject(PersistentStoreKey);
         }
     }
 }

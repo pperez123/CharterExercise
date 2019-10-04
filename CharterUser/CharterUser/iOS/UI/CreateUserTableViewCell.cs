@@ -31,6 +31,8 @@ namespace CharterUser.iOS.UI
 
 			TitleLabel.Font = UIFont.SystemFontOfSize(17);
 			InputField.Font = UIFont.SystemFontOfSize(20);
+			InputField.AutocapitalizationType = UITextAutocapitalizationType.None;
+			InputField.AutocorrectionType = UITextAutocorrectionType.No;
 
 			ContentView.AddSubview(TitleLabel);
 			ContentView.AddSubview(InputField);

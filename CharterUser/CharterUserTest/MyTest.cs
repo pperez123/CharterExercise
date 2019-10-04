@@ -15,7 +15,7 @@ namespace CharterUserTest
         [Test]
         public void TestUserPersistence()
         {
-            NSUserDefaults.StandardUserDefaults.RemoveObject(UserStore.PersistentStoreKey);
+            UserStore.ClearLocalStorage();
             
             var userStorage = new UserStore();
             
@@ -55,7 +55,7 @@ namespace CharterUserTest
             Assert.True(errors.Any(x => x == CreateUserViewModel.PasswordLengthError));
             Assert.True(errors.Any(x => x == CreateUserViewModel.PasswordAtLeastOneLetterDigitError));
 
-            viewModel.Password = "$!@#$%^&*()!@";
+            viewModel.Password = "$2@#abc&*(1!@";
             var errors2 = viewModel.ValidatePassword().ToArray();
             Assert.True(errors2.Any(x => x == CreateUserViewModel.PasswordLengthError));
             Assert.True(errors2.Any(x => x == CreateUserViewModel.PasswordAlphanumericError));

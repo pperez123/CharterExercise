@@ -17,9 +17,12 @@ namespace CharterUser.Common.ViewModel
         
         bool CanSave { get; }
 
-        void Save();
+        void Save(bool persist);
         IEnumerable<string> ValidateRequiredFields();
         IEnumerable<string> ValidatePassword();
+
+        IObservable<IEnumerable<string>> OnError { get; }
+        IObservable<Unit> OnSave { get; }
     }
     
     public class CreateUserViewModel: ICreateUser
@@ -27,7 +30,7 @@ namespace CharterUser.Common.ViewModel
         public const string PasswordLengthError = "Password must be between 5 and 12 characters in length.";
         public const string PasswordAlphanumericError = "Password must contain letters and numbers only.";
         public const string PasswordAtLeastOneLetterDigitError = "Password must have at least one letter and one digit.";
-        public const string PasswordRepeatedSequenceError = "Password must not contain any repeated sequences of characters.";
+        public const string PasswordRepeatedSequenceError = "Password must not contain any consecutively repeated sequences of characters.";
         public string Username { get; set; }
         public string Password { get; set; } = "";
         public string Email { get; set; }
@@ -46,7 +49,7 @@ namespace CharterUser.Common.ViewModel
 
         public IObservable<IEnumerable<string>> OnError => onErrorSubject;
         public IObservable<Unit> OnSave => onSaveSubject;
-        
+
         public CreateUserViewModel(IUserStore store)
         {
             userStore = store;
@@ -66,7 +69,7 @@ namespace CharterUser.Common.ViewModel
                 errors.Add("Please provide a password.");
             }
 
-            if (string.IsNullOrEmpty(Password))
+            if (string.IsNullOrEmpty(Email))
             {
                 errors.Add("Please provide an email.");
             }
@@ -78,7 +81,7 @@ namespace CharterUser.Common.ViewModel
         {
             var errors = new List<string>();
 
-            if (Password.Length >= 5 && Password.Length <= 12)
+            if (Password.Length < 5 || Password.Length > 12)
             {
                 errors.Add(PasswordLengthError);
             }
@@ -121,7 +124,7 @@ namespace CharterUser.Common.ViewModel
             }
         }
 
-        public void Save()
+        public void Save(bool persist)
         {
             CheckRequiredFields();
             CheckPassword();
@@ -138,6 +141,11 @@ namespace CharterUser.Common.ViewModel
                 };
                 
                 userStore.Add(user);
+                
+                if (persist)
+                    userStore.Persist();
+                
+                onSaveSubject.OnNext(Unit.Default);
             }
         }
     }

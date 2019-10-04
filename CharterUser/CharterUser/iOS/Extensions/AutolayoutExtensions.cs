@@ -303,9 +303,9 @@ namespace CharterUser.iOS.Extensions
 
         // Pinning Height Constants
 
-        public static NSLayoutConstraint PinHeight(this UIView view, float width)
+        public static NSLayoutConstraint PinHeight(this UIView view, float height)
         {
-            var constraint = NSLayoutConstraint.Create(view, NSLayoutAttribute.Height, NSLayoutRelation.Equal, 1, width);
+            var constraint = NSLayoutConstraint.Create(view, NSLayoutAttribute.Height, NSLayoutRelation.Equal, 1, height);
             constraint.Active = true;
             return constraint;
         }
