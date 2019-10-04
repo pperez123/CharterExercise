@@ -42,7 +42,11 @@ namespace CharterUser.iOS.Model
         }
 
         public int Count => Storage.Count;
-
+        
+        /// <summary>
+        /// Background operation to serialize collection object to a json string.
+        /// The string is then stored in the device's standard user defaults storage.
+        /// </summary>
         public void Persist()
         {
             Task.Factory.StartNew(() =>
@@ -54,7 +58,12 @@ namespace CharterUser.iOS.Model
                 }
             });
         }
-
+        
+        /// <summary>
+        /// This method retrieves the json representation of the user collection from the device's
+        /// standard user defaults storage. The json is deserialized into an IEnumerable instance and used
+        /// to initialize an ObservableCollection object.
+        /// </summary>
         public void LoadUsers()
         {
             Storage = new ObservableCollection<User>();
@@ -73,7 +82,10 @@ namespace CharterUser.iOS.Model
                 }
             }
         }
-
+        
+        /// <summary>
+        /// Removes the local device storage of the user list.
+        /// </summary>
         public static void ClearLocalStorage()
         {
             NSUserDefaults.StandardUserDefaults.RemoveObject(PersistentStoreKey);

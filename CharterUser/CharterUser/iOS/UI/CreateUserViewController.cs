@@ -131,7 +131,7 @@ namespace CharterUser.iOS.UI
 					case 1:
 						cell.TitleLabel.Text = "Password";
 						cell.InputField.Placeholder = "Please enter your password.";
-						cell.InputField.SecureTextEntry = true;
+						cell.IsPasswordField();
 						cell.InputField.EditingChanged += (sender, args) =>
 						{
 							if (sender is UITextField field)

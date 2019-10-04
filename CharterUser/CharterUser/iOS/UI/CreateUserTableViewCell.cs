@@ -12,6 +12,8 @@ namespace CharterUser.iOS.UI
 		public UILabel TitleLabel { get; } = new UILabel();
 		public UITextField InputField { get; } = new UITextField();
 		public UISwitch Switch { get; } = new UISwitch();
+		
+		readonly UIButton eyeButton = new UIButton(UIButtonType.Custom);
 
 		public CreateUserTableViewCell(IntPtr handle) : base (handle)
 		{
@@ -28,6 +30,7 @@ namespace CharterUser.iOS.UI
 			TitleLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 			InputField.TranslatesAutoresizingMaskIntoConstraints = false;
 			Switch.TranslatesAutoresizingMaskIntoConstraints = false;
+			eyeButton.TranslatesAutoresizingMaskIntoConstraints = false;
 
 			TitleLabel.Font = UIFont.SystemFontOfSize(17);
 			InputField.Font = UIFont.SystemFontOfSize(20);
@@ -37,22 +40,46 @@ namespace CharterUser.iOS.UI
 			ContentView.AddSubview(TitleLabel);
 			ContentView.AddSubview(InputField);
 			ContentView.AddSubview(Switch);
+			ContentView.AddSubview(eyeButton);
 
 			TitleLabel.AlignEdgesWithSuperview(RectEdge.Leading | RectEdge.Top, new UIEdgeInsets(16, 16, 16, 16));
 			
 			InputField.PinVerticalSpacing(TitleLabel, 16);
-			InputField.AlignEdgesWithSuperview(RectEdge.Leading | RectEdge.Bottom | RectEdge.Trailing, 
-				new UIEdgeInsets(16, 16, 16, 16));
+			InputField.AlignEdgesWithSuperview(RectEdge.Leading | RectEdge.Bottom, 
+				new UIEdgeInsets(16, 16, 16, 0));
+
+			eyeButton.PinHorizontalSpacing(InputField, 8);
+			eyeButton.AlignEdgeWithSuperview(RectEdge.Trailing, -32);
+			eyeButton.AlignVerticalCenter(InputField);
 
 			Switch.PinHorizontalSpacing(TitleLabel, 16);
 			Switch.AlignEdgesWithSuperview(RectEdge.Trailing, new UIEdgeInsets(0,0,0,16));
 			Switch.AlignVerticalCenter(TitleLabel);
 			Switch.Hidden = true;
+			
+			eyeButton.SetImage(UIImage.FromBundle("iconEye"), UIControlState.Normal);
+			eyeButton.PinSize(22, 22);
+			
+			eyeButton.TouchUpInside += (sender, args) =>
+			{ 
+				InputField.SecureTextEntry = !InputField.SecureTextEntry;
+				eyeButton.SetImage(InputField.SecureTextEntry ? UIImage.FromBundle("iconEye") : UIImage.FromBundle("iconInvisible"), 
+					UIControlState.Normal);
+			};
+
+			eyeButton.Hidden = true;
+		}
+
+		public void IsPasswordField()
+		{
+			InputField.SecureTextEntry = true;
+			eyeButton.Hidden = false;
 		}
 
 		public void ToggleSwitchVisibility()
 		{
 			InputField.Hidden = !InputField.Hidden;
+			eyeButton.Hidden = InputField.Hidden;
 			Switch.Hidden = !Switch.Hidden;
 		}
 	}
