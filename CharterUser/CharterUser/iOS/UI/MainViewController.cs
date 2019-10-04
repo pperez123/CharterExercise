@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Reactive.Disposables;
-using System.Threading;
 using CharterUser.Common;
 using CharterUser.Common.ViewModel;
 using Foundation;
@@ -17,7 +15,7 @@ namespace CharterUser.iOS.UI
         readonly IUserView viewModel = new UserViewModel(UserApp.SharedInstance.UserStore);
         readonly MainTableViewSource tableViewSource = new MainTableViewSource();
 
-        private bool appeared, emptyCellAdded;
+        private bool appeared;
 
         public MainViewController(IntPtr handle) : base(handle)
         {
